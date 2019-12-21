@@ -21,7 +21,6 @@ import com.final_test.moneylovely.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,9 +38,7 @@ public class Sta_Month_Fragment extends Fragment {
     static TextView txtTongChiMonth;
     TextView txtTongThuMonth;
     static TextView txtMonth;
-    DatabaseReference mData;
-    FirebaseAuth firebaseAuth;
-    static String UserID;
+    static int UserID;
     static String thangHientai;
     Spinner spinnerThang;
     static int tongThuVND = 0;
@@ -70,7 +67,7 @@ public class Sta_Month_Fragment extends Fragment {
             String money = dataCV.getString(2);
             String donviThu = dataCV.getString(3);
             String date = dataCV.getString(6);
-            UserID = dataCV.getString(10);
+            UserID = dataCV.getInt(10);
             if (date.contains(thangHientai)) {
                 if (donviThu.equals("VND")) {
                     tongThuVND += Integer.parseInt(money);
@@ -91,7 +88,7 @@ public class Sta_Month_Fragment extends Fragment {
             String money = dataCV.getString(2);
             String donviThu = dataCV.getString(3);
             String date = dataCV.getString(6);
-            UserID = dataCV.getString(10);
+            UserID = dataCV.getInt(10);
             if (date.contains(thangHientai)) {
                 if (donviThu.equals("VND")) {
                     tongChiVND += Integer.parseInt(money);
@@ -152,9 +149,7 @@ public class Sta_Month_Fragment extends Fragment {
         txtTongChiMonth = view.findViewById(R.id.txtChiMonth);
         txtTongThuMonth = view.findViewById(R.id.txtThuMonth);
         spinnerThang = view.findViewById(R.id.spinerThang);
-        mData = FirebaseDatabase.getInstance().getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
-        UserID = firebaseAuth.getCurrentUser().getUid();
+        UserID = MainActivity.UserID;
         pieChart = (PieChart) view.findViewById(R.id.piechartMonth);
     }
 }

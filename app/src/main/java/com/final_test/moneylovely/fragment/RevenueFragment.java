@@ -561,7 +561,7 @@ public class RevenueFragment extends Fragment {
         thu_chi_modelArrayList = new ArrayList<>();
         fab = view.findViewById(R.id.fabReve);
         recyclerViewThuChi = view.findViewById(R.id.recyclerDoanhThu);
-//        UserID = firebaseAuth.getCurrentUser().getUid();
+        UserID = MainActivity.UserID;
         spinnerArrayList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewThuChi.setLayoutManager(layoutManager);

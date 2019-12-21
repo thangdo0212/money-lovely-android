@@ -26,7 +26,6 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,9 +42,7 @@ public class Sta_Year_Fragment extends Fragment {
     static TextView txtTongChiYear;
     TextView txtTongThuYear;
     static TextView txtYear;
-    DatabaseReference mData;
-    FirebaseAuth firebaseAuth;
-    static String UserID;
+    static int UserID;
     static String namHienTai;
     static Spinner spinerYear;
     static int tongThuVND = 0;
@@ -74,7 +71,7 @@ public class Sta_Year_Fragment extends Fragment {
             String money = dataCV.getString(2);
             String donviThu = dataCV.getString(3);
             String date = dataCV.getString(6);
-            UserID = dataCV.getString(10);
+            UserID = dataCV.getInt(10);
             if (date.contains(namHienTai)) {
                 if (donviThu.equals("VND")) {
                     tongThuVND += Integer.parseInt(money);
@@ -95,7 +92,7 @@ public class Sta_Year_Fragment extends Fragment {
             String money = dataCV.getString(2);
             String donviThu = dataCV.getString(3);
             String date = dataCV.getString(6);
-            UserID = dataCV.getString(10);
+            UserID = dataCV.getInt(10);
             if (date.contains(namHienTai)) {
                 if (donviThu.equals("VND")) {
                     tongChiVND += Integer.parseInt(money);
@@ -186,9 +183,7 @@ public class Sta_Year_Fragment extends Fragment {
         txtTongChiYear = view.findViewById(R.id.txtChiYear);
         txtTongThuYear = view.findViewById(R.id.txtThuYear);
         spinerYear = view.findViewById(R.id.spinerYear);
-        mData = FirebaseDatabase.getInstance().getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
-        UserID = firebaseAuth.getCurrentUser().getUid();
+        UserID = MainActivity.UserID;
         pieChart = (PieChart) view.findViewById(R.id.piechartYear);
 
     }

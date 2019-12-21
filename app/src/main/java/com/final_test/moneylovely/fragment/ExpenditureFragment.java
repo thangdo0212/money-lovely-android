@@ -529,7 +529,7 @@ public class ExpenditureFragment extends Fragment {
         thu_chi_modelArrayList = new ArrayList<>();
         fab = view.findViewById(R.id.fabExpen);
         recyclerViewThuChi = view.findViewById(R.id.recyclerKhoangChi);
-//        UserID = firebaseAuth.getCurrentUser().getUid();
+        UserID = MainActivity.UserID;
         spinnerArrayList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewThuChi.setLayoutManager(layoutManager);

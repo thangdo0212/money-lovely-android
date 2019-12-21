@@ -27,15 +27,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.final_test.moneylovely.MainActivity;
 import com.final_test.moneylovely.R;
 import com.final_test.moneylovely.adapter.Info_RecyclerViewAdapter;
 import com.final_test.moneylovely.model.User;
 import com.final_test.moneylovely.view.CallbackFragment;
 import com.final_test.moneylovely.view.Show_Hide_Dialog;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -62,15 +59,14 @@ public class IntroduceFragment extends Fragment {
     TextView txtUserName;
     final int REQUSE_CODE_CAMERA = 123;
     final int REQUES_CODE_FILE = 456;
-    String UserID, linkphoto;
+    String linkphoto;
+    int UserID;
     ProgressDialog progressDialog;
     ArrayList<User> userArrayList;
     RecyclerView recyclerView;
     Info_RecyclerViewAdapter info_recyclerViewAdapter;
     FragmentManager fragmentManager;
     DatabaseReference mData;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
     StorageReference storage;
 
     @Override
@@ -89,7 +85,7 @@ public class IntroduceFragment extends Fragment {
 
     private void setUser() {
         imgUser.setEnabled(true);
-        mData.child("users").child(UserID).addValueEventListener(new ValueEventListener() {
+        mData.child("users").child(UserID + "").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User value = dataSnapshot.getValue(User.class);
@@ -117,7 +113,7 @@ public class IntroduceFragment extends Fragment {
         final UploadTask uploadTask = mountainsRef.putBytes(data);
         uploadTask.addOnFailureListener(exception -> Toast.makeText(getActivity(), "Cập nhật ảnh thất bại!", Toast.LENGTH_SHORT).show()).addOnSuccessListener(taskSnapshot -> mountainsRef.getDownloadUrl().addOnSuccessListener(uri -> {
             linkphoto = uri.toString();
-            updateLinkPhotoUser(UserID, linkphoto);
+            updateLinkPhotoUser(UserID + "", linkphoto);
         }));
     }
 
@@ -195,7 +191,7 @@ public class IntroduceFragment extends Fragment {
 
         if (requestCode == REQUSE_CODE_CAMERA && resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            updatePhoto(bitmap, UserID);
+            updatePhoto(bitmap, UserID + "");
             imgUser.setImageBitmap(bitmap);
         }
         if (requestCode == REQUES_CODE_FILE && resultCode == RESULT_OK && data != null) {
@@ -203,7 +199,7 @@ public class IntroduceFragment extends Fragment {
             try {
                 InputStream inputStream = getActivity().getApplicationContext().getContentResolver().openInputStream(uri);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                updatePhoto(bitmap, UserID);
+                updatePhoto(bitmap, UserID + "");
                 imgUser.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
             }
@@ -215,11 +211,8 @@ public class IntroduceFragment extends Fragment {
 
     private void anhxa(View view) {
         mData = FirebaseDatabase.getInstance().getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance().getReference();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        fragmentManager = getActivity().getSupportFragmentManager();
-        UserID = firebaseUser.getUid();
+        UserID = MainActivity.UserID;
         imgUser = view.findViewById(R.id.imgUser);
         progressDialog = new ProgressDialog(getActivity());
         txtUserName = view.findViewById(R.id.txtUserName);

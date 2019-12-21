@@ -19,7 +19,6 @@ import com.final_test.moneylovely.view.DialogDate;
 import com.github.mikephil.charting.charts.PieChart;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
@@ -30,9 +29,7 @@ public class Sta_Day_Fragment extends Fragment {
     TextView txtTongThuDay;
     static TextView txtNgayHienTai;
     Calendar calendar;
-    DatabaseReference mData;
-    FirebaseAuth firebaseAuth;
-    static String UserID;
+    static int UserID;
     static int tongThuVND = 0;
     static int tongChiVND = 0;
     public static PieChart mChart;
@@ -68,7 +65,7 @@ public class Sta_Day_Fragment extends Fragment {
             String money = dataCV.getString(2);
             String donviThu = dataCV.getString(3);
             String date = dataCV.getString(6);
-            UserID = dataCV.getString(10);
+            UserID = dataCV.getInt(10);
             if (txtNgayHienTai.getText().equals(date)) {
                 if (donviThu.equals("VND")) {
                     tongThuVND += Integer.parseInt(money);
@@ -90,7 +87,7 @@ public class Sta_Day_Fragment extends Fragment {
             String money = dataCV1.getString(2);
             String donviThu = dataCV1.getString(3);
             String date = dataCV1.getString(6);
-            UserID = dataCV1.getString(10);
+            UserID = dataCV1.getInt(10);
             if (txtNgayHienTai.getText().equals(date)) {
                 if (donviThu.equals("VND")) {
                     tongChiVND += Integer.parseInt(money);
@@ -110,10 +107,7 @@ public class Sta_Day_Fragment extends Fragment {
         txtTongChiDay = view.findViewById(R.id.txtChiDay);
         txtTongThuDay = view.findViewById(R.id.txtThuDay);
         txtNgayHienTai = view.findViewById(R.id.txtNgayHientai);
-        mData = FirebaseDatabase.getInstance().getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
-//        UserID = firebaseAuth.getCurrentUser().getUid();
-        //
+        UserID = MainActivity.UserID;
         mChart = (PieChart) view.findViewById(R.id.piechart);
     }
 }

@@ -17,9 +17,9 @@ import com.final_test.moneylovely.database.Database;
 public class MainActivity extends AppCompatActivity {
 
     Button btDangKy, btDangNhap;
-    Button btQuenMk;
     EditText edTenDangNhap, edMatKhau;
     public static Database database;
+    public static int UserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +69,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             int isSuccess = database.checkAccount(username, password);
             if (isSuccess > 0) {
+                UserID = isSuccess;
                 Intent it = new Intent(MainActivity.this, HomeActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("UserID", isSuccess);
-                it.putExtra("bundle", bundle);
                 startActivity(it);
             } else {
                 Toast.makeText(MainActivity.this, "Tên đăng nhập hoặc mất khẩu chưa chính xác", Toast.LENGTH_SHORT).show();
