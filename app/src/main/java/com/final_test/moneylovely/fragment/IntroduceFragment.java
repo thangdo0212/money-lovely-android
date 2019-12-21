@@ -27,7 +27,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.final_test.moneylovely.R;
 import com.final_test.moneylovely.adapter.Info_RecyclerViewAdapter;
 import com.final_test.moneylovely.model.User;
@@ -95,10 +94,11 @@ public class IntroduceFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User value = dataSnapshot.getValue(User.class);
                 userArrayList.clear();
-                userArrayList.add(new User(value.getUserID(),value.getUsername(), value.getFull_name(), value.getPassword(), value.getAddress()));
+                userArrayList.add(new User(value.getUserID(), value.getUsername(), value.getFull_name(), value.getPassword(), value.getAddress()));
                 recyclerView.setAdapter(info_recyclerViewAdapter);
                 txtUserName.setText(value.getUsername());
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -110,53 +110,31 @@ public class IntroduceFragment extends Fragment {
     public void updatePhoto(Bitmap bitmap, final String idUser) {
         Show_Hide_Dialog.showProgressDialogWithTitle("Đang cập nhật...", progressDialog);
         final StorageReference mountainsRef = storage.child("users").child(idUser);
-        Log.d("iduser" , idUser);
+        Log.d("iduser", idUser);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         final byte[] data = baos.toByteArray();
         final UploadTask uploadTask = mountainsRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getActivity(), "Cập nhật ảnh thất bại!", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        linkphoto = uri.toString();
-                        updateLinkPhotoUser(UserID, linkphoto);
-                    }
-                });
-
-            }
-        });
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(getActivity(), "Cập nhật ảnh thất bại!", Toast.LENGTH_SHORT).show()).addOnSuccessListener(taskSnapshot -> mountainsRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            linkphoto = uri.toString();
+            updateLinkPhotoUser(UserID, linkphoto);
+        }));
     }
 
     public void updateLinkPhotoUser(String idUser, String linkPhotoUser) {
-        mData.child("users").child(idUser).child("image").setValue(linkPhotoUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Show_Hide_Dialog.hideProgressDialogWithTitle(progressDialog);
-                    Toast.makeText(getActivity(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Show_Hide_Dialog.hideProgressDialogWithTitle(progressDialog);
-                    Toast.makeText(getActivity(), "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
-                }
+        mData.child("users").child(idUser).child("image").setValue(linkPhotoUser).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Show_Hide_Dialog.hideProgressDialogWithTitle(progressDialog);
+                Toast.makeText(getActivity(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+            } else {
+                Show_Hide_Dialog.hideProgressDialogWithTitle(progressDialog);
+                Toast.makeText(getActivity(), "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void eventImg() {
-        imgUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog_ChooseAddAnhSV();
-            }
-        });
+        imgUser.setOnClickListener(v -> dialog_ChooseAddAnhSV());
     }
 
     private void dialog_ChooseAddAnhSV() {
@@ -167,19 +145,13 @@ public class IntroduceFragment extends Fragment {
         ImageView btnChooseAnhCamera = dialog.findViewById(R.id.btnchooseanhCamera);
 
 
-        btnChooseAnhCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUSE_CODE_CAMERA);
-                dialog.dismiss();
-            }
+        btnChooseAnhCamera.setOnClickListener(v -> {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUSE_CODE_CAMERA);
+            dialog.dismiss();
         });
-        btnChooseAnhFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUES_CODE_FILE);
-                dialog.dismiss();
-            }
+        btnChooseAnhFile.setOnClickListener(v -> {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUES_CODE_FILE);
+            dialog.dismiss();
         });
 
 

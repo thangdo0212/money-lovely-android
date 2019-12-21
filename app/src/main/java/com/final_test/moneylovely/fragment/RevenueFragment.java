@@ -421,29 +421,20 @@ public class RevenueFragment extends Fragment {
         dialog.setContentView(R.layout.custom_dialog_addloai);
         final EditText edtLoainew = dialog.findViewById(R.id.edtLoainew);
         final CircleImageView img_iconLoai = dialog.findViewById(R.id.img_iconLoai);
-        img_iconLoai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogChooseIcon(img_iconLoai);
-
-            }
-        });
+        img_iconLoai.setOnClickListener(v -> dialogChooseIcon(img_iconLoai));
         Button btnAddLoai = dialog.findViewById(R.id.btnAddLoai);
 
-        btnAddLoai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String loaiNew = edtLoainew.getText().toString().trim();
+        btnAddLoai.setOnClickListener(v -> {
+            final String loaiNew = edtLoainew.getText().toString().trim();
+            imgIconbyte = ParseByteArr.imgIconbyte;
+            if (imgIconbyte == null) {
+                img_iconLoai.setImageResource(R.drawable.ic_edit);
+                ParseByteArr.DrawableToByte(img_iconLoai);
                 imgIconbyte = ParseByteArr.imgIconbyte;
-                if (imgIconbyte == null) {
-                    img_iconLoai.setImageResource(R.drawable.ic_edit);
-                    ParseByteArr.DrawableToByte(img_iconLoai);
-                    imgIconbyte = ParseByteArr.imgIconbyte;
-                }
-                MainActivity.database.insertType("LoaiThu", loaiNew, 0, imgIconbyte, UserID);
-                Toast.makeText(getActivity(), "Thêm thành công!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
             }
+            MainActivity.database.insertType("LoaiThu", loaiNew, 0, imgIconbyte, UserID);
+            Toast.makeText(getActivity(), "Thêm thành công!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         });
 
 
@@ -468,13 +459,10 @@ public class RevenueFragment extends Fragment {
         arrIcon.add(R.drawable.ic_moto);
         GridViewIconAdapter gridViewIconAdapter = new GridViewIconAdapter(getActivity(), R.layout.custom_gridview, arrIcon);
         gridViewIcon.setAdapter(gridViewIconAdapter);
-        gridViewIcon.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                imgIcon.setImageResource(arrIcon.get(position));
-                ParseByteArr.DrawableToByte(imgIcon);
-                dialog.dismiss();
-            }
+        gridViewIcon.setOnItemClickListener((parent, view, position, id) -> {
+            imgIcon.setImageResource(arrIcon.get(position));
+            ParseByteArr.DrawableToByte(imgIcon);
+            dialog.dismiss();
         });
 
         dialog.show();

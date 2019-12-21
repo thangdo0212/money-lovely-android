@@ -72,8 +72,6 @@ public class ExpenditureFragment extends Fragment {
     RecyclerView recyclerViewThuChi;
     Dialog dialog;
     ProgressDialog progressDialog;
-    DatabaseReference mData;
-    FirebaseAuth firebaseAuth;
     String donviThu;
     int UserID;
     byte[] imgIconbyte, imgCVbyte;
@@ -153,37 +151,26 @@ public class ExpenditureFragment extends Fragment {
 
                 Button buttonEdtCv = dialog.findViewById(R.id.btnaddCv_dialog);
                 buttonEdtCv.setText("Sửa");
-                edtDate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogDate.dialogDate(edtDate, getActivity());
-                    }
-                });
-                buttonEdtCv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final int id = model.getId();
-                        final String nameJob = edtNamejob.getText().toString().trim();
-                        final String money = edtMoney.getText().toString().trim();
-                        final String date = edtDate.getText().toString();
-                        final String note = edtNote.getText().toString().trim();
+                edtDate.setOnClickListener(v -> DialogDate.dialogDate(edtDate, getActivity()));
+                buttonEdtCv.setOnClickListener(v -> {
+                    final int id = model.getId();
+                    final String nameJob = edtNamejob.getText().toString().trim();
+                    final String money = edtMoney.getText().toString().trim();
+                    final String date = edtDate.getText().toString();
+                    final String note = edtNote.getText().toString().trim();
 //                        ParseByteArr.DrawableToByte(imgCV);
 //                        imgCVbyte = ParseByteArr.imgCvbyte;
-                        if (TextUtils.isEmpty(nameJob) || TextUtils.isEmpty(money) || TextUtils.isEmpty(date)) {
-                            CustomToast.makeText(getActivity(), "Vui lòng nhập đủ thông tin!", CustomToast.LENGTH_LONG, CustomToast.ERROR, true).show();
-                        } else {
-                            Show_Hide_Dialog.showProgressDialogWithTitle("Đang cập nhật!", progressDialog);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MainActivity.database.QueryData("UPDATE KhoangChi SET id = '" + id + "', nameCV = '" + nameJob + "', money = '" + money + "', donviThu = '" + donviThu + "', danhGia = 0,deleteFlag = 0,date = '" + date + "', ghiChu = '" + note + "', idLoai = '" + idLoai + "',idUser = '" + UserID + "' WHERE id = '" + id + "' AND idUser = '" + UserID + "'");
-                                    CustomToast.makeText(getActivity(), "Cập nhật thành công!", CustomToast.LENGTH_LONG, CustomToast.SUCCESS,false).show();
-                                    GetDataCV();
-                                    Show_Hide_Dialog.hideProgressDialogWithTitle(progressDialog);
-                                }
-                            }, 1000);
-                            dialog.dismiss();
-                        }
+                    if (TextUtils.isEmpty(nameJob) || TextUtils.isEmpty(money) || TextUtils.isEmpty(date)) {
+                        CustomToast.makeText(getActivity(), "Vui lòng nhập đủ thông tin!", CustomToast.LENGTH_LONG, CustomToast.ERROR, true).show();
+                    } else {
+                        Show_Hide_Dialog.showProgressDialogWithTitle("Đang cập nhật!", progressDialog);
+                        new Handler().postDelayed(() -> {
+                            MainActivity.database.QueryData("UPDATE KhoangChi SET id = '" + id + "', nameCV = '" + nameJob + "', money = '" + money + "', donviThu = '" + donviThu + "', danhGia = 0,deleteFlag = 0,date = '" + date + "', ghiChu = '" + note + "', idLoai = '" + idLoai + "',idUser = '" + UserID + "' WHERE id = '" + id + "' AND idUser = '" + UserID + "'");
+                            CustomToast.makeText(getActivity(), "Cập nhật thành công!", CustomToast.LENGTH_LONG, CustomToast.SUCCESS,false).show();
+                            GetDataCV();
+                            Show_Hide_Dialog.hideProgressDialogWithTitle(progressDialog);
+                        }, 1000);
+                        dialog.dismiss();
                     }
                 });
                 dialog.show();
@@ -194,28 +181,22 @@ public class ExpenditureFragment extends Fragment {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle("Thông báo");
                 alertDialog.setMessage("Bạn có muốn xóa công việc " + model.getNameCV());
-                alertDialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.database.QueryData("UPDATE KhoangChi SET deleteFlag = 1 WHERE id = '" + model.getId() + "' AND idUser = '" + model.getIdUser() + "'");
-                        CustomToast.makeText(getActivity(), "Xóa thành công!", CustomToast.LENGTH_LONG, CustomToast.SUCCESS,false).show();
-                        thu_chi_modelArrayList.remove(i);
+                alertDialog.setPositiveButton("Có", (dialog, which) -> {
+                    MainActivity.database.QueryData("UPDATE KhoangChi SET deleteFlag = 1 WHERE id = '" + model.getId() + "' AND idUser = '" + model.getIdUser() + "'");
+                    CustomToast.makeText(getActivity(), "Xóa thành công!", CustomToast.LENGTH_LONG, CustomToast.SUCCESS,false).show();
+                    thu_chi_modelArrayList.remove(i);
 
-                        try {
-                            Sta_Day_Fragment.GetDataChi();
-                            Sta_Month_Fragment.getDataChi();
-                            Sta_Year_Fragment.getDataChi();
-                        }catch (Exception e){
+                    try {
+                        Sta_Day_Fragment.GetDataChi();
+                        Sta_Month_Fragment.getDataChi();
+                        Sta_Year_Fragment.getDataChi();
+                    }catch (Exception e){
 
-                        }
-                        thuChiAdapter.notifyDataSetChanged();
                     }
+                    thuChiAdapter.notifyDataSetChanged();
                 });
-                alertDialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                alertDialog.setNegativeButton("Không", (dialog, which) -> {
 
-                    }
                 });
                 alertDialog.show();
             }
@@ -261,22 +242,16 @@ public class ExpenditureFragment extends Fragment {
                 }
 
                 // bắt sự kiện edit
-                btnEdit_dialog_detail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onClickEditCv(i, model);
-                        dialogdetail.dismiss();
+                btnEdit_dialog_detail.setOnClickListener(v -> {
+                    onClickEditCv(i, model);
+                    dialogdetail.dismiss();
 
 
-                    }
                 });
-                btndelete_dialog_detail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onClickDeleteCv(i,model);
-                        //clickDetail.onClickDeleteCv(i,model);
-                        dialogdetail.dismiss();
-                    }
+                btndelete_dialog_detail.setOnClickListener(v -> {
+                    onClickDeleteCv(i,model);
+                    //clickDetail.onClickDeleteCv(i,model);
+                    dialogdetail.dismiss();
                 });
 
 
@@ -297,12 +272,7 @@ public class ExpenditureFragment extends Fragment {
 
 
     private void eventFab() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogAddCVThu();
-            }
-        });
+        fab.setOnClickListener(v -> dialogAddCVThu());
     }
 
     //thêm công việc doanh thu
@@ -355,40 +325,37 @@ public class ExpenditureFragment extends Fragment {
             }
         });
 
-        buttonAddCv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String nameJob = edtNamejob.getText().toString().trim();
-                final String money = edtMoney.getText().toString().trim();
-                String a[] = money.split(",");
-                String b = "";
-                for(int i = 0 ; i < a.length ; i++){
-                    b = b + a[i];
-                }
-                final String date = edtDate.getText().toString();
-                final String note = edtNote.getText().toString().trim();
-                //parse img sang mảng byte
-                ParseByteArr.DrawableToByte(imgCV);
-                imgCVbyte = ParseByteArr.imgCvbyte;
-                if (TextUtils.isEmpty(nameJob) || TextUtils.isEmpty(money) || TextUtils.isEmpty(date)) {
-                    CustomToast.makeText(getActivity(), "Vui lòng nhập đủ thông tin!", CustomToast.LENGTH_LONG, CustomToast.ERROR, false).show();
-                } else {
-                    MainActivity.database.insertJob("KhoangChi", nameJob, b, donviThu, 0, 0, date, note, imgCVbyte, idLoai, UserID);
-                    CustomToast.makeText(getActivity(), "Thêm thành công!", CustomToast.LENGTH_LONG, CustomToast.SUCCESS, false).show();
-                    GetDataCV();
-                   try {
-                       Sta_Day_Fragment.GetDataChi();
-                       Sta_Month_Fragment.getDataChi();
-                       Sta_Year_Fragment.getDataChi();
-                   }catch (Exception e){
+        buttonAddCv.setOnClickListener(v -> {
+            final String nameJob = edtNamejob.getText().toString().trim();
+            final String money = edtMoney.getText().toString().trim();
+            String a[] = money.split(",");
+            String b = "";
+            for(int i = 0 ; i < a.length ; i++){
+                b = b + a[i];
+            }
+            final String date = edtDate.getText().toString();
+            final String note = edtNote.getText().toString().trim();
+            //parse img sang mảng byte
+            ParseByteArr.DrawableToByte(imgCV);
+            imgCVbyte = ParseByteArr.imgCvbyte;
+            if (TextUtils.isEmpty(nameJob) || TextUtils.isEmpty(money) || TextUtils.isEmpty(date)) {
+                CustomToast.makeText(getActivity(), "Vui lòng nhập đủ thông tin!", CustomToast.LENGTH_LONG, CustomToast.ERROR, false).show();
+            } else {
+                MainActivity.database.insertJob("KhoangChi", nameJob, b, donviThu, 0, 0, date, note, imgCVbyte, idLoai, UserID);
+                CustomToast.makeText(getActivity(), "Thêm thành công!", CustomToast.LENGTH_LONG, CustomToast.SUCCESS, false).show();
+                GetDataCV();
+               try {
+                   Sta_Day_Fragment.GetDataChi();
+                   Sta_Month_Fragment.getDataChi();
+                   Sta_Year_Fragment.getDataChi();
+               }catch (Exception e){
 
-                   }
-
-                }
-                dialog.dismiss();
-
+               }
 
             }
+            dialog.dismiss();
+
+
         });
         imgAddLoai.setOnClickListener(v -> {
             dialogAddLoai();

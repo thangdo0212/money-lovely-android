@@ -42,32 +42,21 @@ public class HomeFragment extends Fragment {
     private void callBack(View view){
         view.setFocusableInTouchMode(true);
         view.requestFocus();
-        view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        AlertDialog.Builder aBuilder = new AlertDialog.Builder(getActivity());
-                        aBuilder.setTitle("Cảnh báo");
-                        aBuilder.setMessage("Bạn có muốn thoát!");
-                        aBuilder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                getActivity().finish();
-                            }
-                        }).setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+        view.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    AlertDialog.Builder aBuilder = new AlertDialog.Builder(getActivity());
+                    aBuilder.setTitle("Cảnh báo");
+                    aBuilder.setMessage("Bạn có muốn thoát!");
+                    aBuilder.setPositiveButton("Có", (dialogInterface, i) -> getActivity().finish()).setNegativeButton("Không", (dialogInterface, i) -> {
 
-                            }
-                        });
+                    });
 
-                        aBuilder.show();
-                        return true;
-                    }
+                    aBuilder.show();
+                    return true;
                 }
-                return false;
             }
+            return false;
         });
     }
 
