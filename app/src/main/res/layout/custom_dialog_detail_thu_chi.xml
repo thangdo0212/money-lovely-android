@@ -47,8 +47,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="Tên CV"
-                    android:textSize="24sp" />
+                    android:text="Tên công việc:"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txttenCvdialogDetail"
@@ -57,7 +57,7 @@
                     android:gravity="left"
                     android:layout_weight="3"
                     android:text="Tên Loai"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -74,8 +74,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="Số tiền"
-                    android:textSize="24sp" />
+                    android:text="Số tiền:"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txtmoneyCvdialogDetail"
@@ -84,7 +84,7 @@
                     android:gravity="left"
                     android:layout_weight="3"
                     android:text="Tên Loai"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -101,8 +101,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="Thời gian"
-                    android:textSize="24sp" />
+                    android:text="Thời gian:"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txtDateCvdialogDetail"
@@ -111,7 +111,7 @@
                     android:layout_weight="3"
                     android:text="Tên Loai"
                     android:gravity="left"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -128,8 +128,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="Ghi chú"
-                    android:textSize="24sp" />
+                    android:text="Ghi chú:"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txtghichuCvdialogDetail"
@@ -138,7 +138,7 @@
                     android:layout_weight="3"
                     android:text="Tên Loai"
                     android:gravity="left"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -155,8 +155,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="Danh mục"
-                    android:textSize="24sp" />
+                    android:text="Danh mục:"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txtDanhmucCvdialogDetail"
@@ -165,7 +165,7 @@
                     android:layout_weight="3"
                     android:text="Tên Loai"
                     android:gravity="left"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -182,8 +182,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="Ảnh"
-                    android:textSize="24sp" />
+                    android:text="Ảnh:"
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/imgCvDetails"

@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.final_test.moneylovely.fragment.HomeFragment;
+import com.final_test.moneylovely.fragment.IntroduceFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -91,6 +92,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.replace(R.id.content_main, homeFragment, homeFragment.getTag()).commit();
                 break;
             case R.id.nav_info:
+                IntroduceFragment introduceFragment = new IntroduceFragment();
+                fragmentTransaction.replace(R.id.content_main, introduceFragment, introduceFragment.getTag()).commit();
                 break;
 
         }
