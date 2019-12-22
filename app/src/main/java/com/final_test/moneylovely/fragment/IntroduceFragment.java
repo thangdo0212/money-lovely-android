@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,7 +22,7 @@ import com.final_test.moneylovely.view.CallbackFragment;
 public class IntroduceFragment extends Fragment {
 
     EditText edTenDangNhap, edMatKhau, edHoTen, edDiaChi;
-    Button btDangKy, btHuy;
+    Button btDmk, btHuy;
     FragmentManager fragmentManager;
 
     @Override
@@ -30,6 +31,7 @@ public class IntroduceFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_introduce, container, false);
         anhxa(view);
         getUserInfo(MainActivity.UserID);
+        btDmk.setOnClickListener(v -> changePass());
         //onclick callback
         CallbackFragment.callBackFragment(view, fragmentManager);
         return view;
@@ -42,8 +44,7 @@ public class IntroduceFragment extends Fragment {
         edMatKhau = (EditText) view.findViewById(R.id.edMatKhau);
         edHoTen = (EditText) view.findViewById(R.id.edHoTen);
         edDiaChi = (EditText) view.findViewById(R.id.edDiaChi);
-        btDangKy = (Button) view.findViewById(R.id.btDangKy);
-        btHuy = (Button) view.findViewById(R.id.btHuy);
+        btDmk = (Button) view.findViewById(R.id.btDmk);
     }
 
     private void getUserInfo(int UserID) {
@@ -66,5 +67,14 @@ public class IntroduceFragment extends Fragment {
         editText.setCursorVisible(false);
         editText.setKeyListener(null);
         editText.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    private void changePass() {
+        String pass = edMatKhau.getText().toString().trim();
+        if(pass.isEmpty()) {
+            Toast.makeText(getActivity(), "Mật khẩu không được để trống", Toast.LENGTH_SHORT).show();
+        } else {
+            MainActivity.database.QueryData("UPDATE user SET password = '" + pass + "' WHERE iduser = " + MainActivity.UserID);
+        }
     }
 }
