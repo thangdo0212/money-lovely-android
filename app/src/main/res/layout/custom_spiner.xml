@@ -14,7 +14,7 @@
         android:id="@+id/imgSp"
         android:src="@drawable/ic_moto"
         app:civ_border_width="0.5dp"
-        app:civ_border_color="#FF5722"
+        app:civ_border_color="#2cb84b"
         android:layout_width="50dp"
         android:layout_height="50dp" />
 
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/txtNameSp"
-        android:textColor="#f00"
+        android:textColor="#000"
         android:layout_margin="10dp"
         android:layout_weight="3"
         android:textSize="20sp"

@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/success_shape"
+        android:background="#2cb84b"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:paddingRight="24dp"
